@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Terminales y Comisiones</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/img/card24.png" type="image/png" sizes="24x24">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Analytics (ejemplo, reemplaza por tu ID real) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HS1LQ534N0');
+      // Aquí podrías agregar lógica para obtener métricas y mostrarlas dinámicamente
+    </script>
+</head>
+<body class="bg-custom">
+    <!-- Navbar superior con logo integrado -->
+    <nav class="navbar">
+        <ul>
+            <li>
+                <a href="index.html" class="logo-tc-nav">
+                  <img src="/assets/img/tyc.png" alt="T&C Logo" class="logo-tc-nav-img">
+                </a>
+            </li>
+            <li><a href="calculadora.html">Calculadora</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="promociones.html">Promociones</a></li>
+            <li><a href="mailto:cajadeherramientasymas@gmail.com">Contacto</a></li>
+        </ul>
+    </nav>
+    <header>
+        <!-- El logo ya está en el navbar, así que se elimina aquí -->
+        <div class="header-content">
+            <div class="icon-terminal">
+                <img src="/assets/img/terminal.png" alt="calc" class="img-calculadora">
+            </div>
+            <div class="header-text">
+                <h1>
+                    <span class="highlight">Terminales</span>
+                    <span class="amp">&</span>
+                    <span class="highlight2">Comisiones</span>
+                </h1>
+                <p class="subtitle">Conoce cuáles son las comisiones que te cobran las terminales de venta en México.</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="stats">
+            <h2>Nuestros números.</h2>
+            <div class="stats-grid">
+                <div>
+                    <div class="stat-title">Usuarios</div>
+                    <div class="stat-number" id="usuarios">150</div>
+                    <i class="fa-solid fa-people-group stat-icon"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Consultas</div>
+                    <div class="stat-number" id="consultas">1499</div>
+                    <i class="fa-solid fa-calculator stat-icon"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Calificación</div>
+                    <div class="stat-number" id="calificacion">4.5</div>
+                    <i class="fa-solid fa-gauge-high stat-icon"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="shortcuts">
+            <h2>Secciones.</h2>
+            <p class="subtitle-seccion">Accede rápidamente a las secciones más importantes de nuestro sitio.</p>
+            <div class="shortcuts-desc">
+                <a class="shortcut" href="calculadora.html">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span class="shortcut-title">Calculadora</span>
+                </a>
+                <a class="shortcut" href="blog.html">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span class="shortcut-title">Blog</span>
+                </a>
+                <a class="shortcut" href="promociones.html">
+                    <i class="fa-solid fa-percent"></i>
+                    <span class="shortcut-title">Promociones</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="donaciones">
+            <h3>Donaciones</h3>
+            <p class="donaciones-desc">
+                ¿Te fue útil esta herramienta?<br>
+                Este proyecto es gratuito. Si deseas apoyar su desarrollo y mantenimiento para agregar mucha más información relevante, puedes hacer una donación voluntaria. ¡Te lo agradeceré de corazón! 🙏
+            </p>
+            <div class="donaciones-links">
+                <a href="#" class="donacion-link">PAYPAL</a> |
+                <a href="#" class="donacion-link">BUY ME A COFFEE</a>
+            </div>
+        </section>
+
+        <!-- Calificación: puedes usar Disqus o un sistema propio -->
+        <!-- Ejemplo de integración Disqus (descomenta y reemplaza "example" por tu shortname) -->
+        <!--
+        <section class="comentarios">
+            <div id="disqus_thread"></div>
+            <script>
+            var disqus_config = function () {
+                this.page.url = window.location.href;
+                this.page.identifier = 'index';
+            };
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://example.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+            </script>
+        </section>
+        -->
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div>
+                <strong>Terminales & Comisiones</strong> &copy; 2025
+            </div>
+            <div>
+                Desarrollado por Caja de Herramientas           </div>
+        </div>
+    </footer>
+    <!-- Bootstrap JS (opcional, para componentes interactivos) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Consulta tu API de métricas y actualiza la interfaz
+    fetch('/api/metrics')
+      .then(res => res.json())
+      .then(data => {
+        if(data.usuarios) document.getElementById('usuarios').textContent = data.usuarios;
+        if(data.consultas) document.getElementById('consultas').textContent = data.consultas;
+        if(data.calificacion) document.getElementById('calificacion').textContent = data.calificacion;
+      })
+      .catch(() => {
+        // Si falla, deja los valores por defecto
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+/* Importa Poppins Light desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Fuente principal para todo el sitio */
+}
+
+.bg-custom {
+    background: #232947 !important;
+    color: #fff;
+    /* Fondo oscuro personalizado y texto blanco, útil para secciones destacadas */
+}
+
+header {
+    padding-top: 32px;
+    margin-top: 56px; /* espacio para navbar */
+    text-align: center;
+    position: relative;
+    /* Espaciado superior y centra el contenido del encabezado */
+}
+
+.logo-tc-link {
+    display: block;
+    margin-top: 72px;
+    margin-bottom: 0;
+    text-decoration: none;
+    /* Hace que el logo sea un bloque clickeable y elimina subrayado */
+}
+
+.logo-tc {
+    font-weight: bold;
+    color: #c6ff00;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    position: static;
+    /* Estilo del logo textual (no navbar), color verde neón y letras separadas */
+}
+
+.logo-tc span {
+    color: #b2ffea;
+    /* Cambia el color de parte del logo a celeste */
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    /* Centra y separa verticalmente los elementos del header */
+}
+
+.icon-terminal {
+    font-size: 10rem;
+    color: #b2ffea;
+    margin-bottom: 100px;
+    align-items: center;
+    /* Icono grande y celeste, con espacio inferior */
+}
+
+h1 {
+    font-size: 7rem !important;
+    margin: 0;
+    font-weight: 700;
+    /* Título principal muy grande y en negrita */
+}
+
+.highlight {
+    color: #c6ff00;
+    /* Resalta texto en verde neón */
+}
+
+.highlight2 {
+    color: #b2ffea;
+    /* Resalta texto en celeste */
+}
+
+.subtitle {
+    margin-top: 12px;
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 400;
+    /* Subtítulo debajo del h1, tamaño normal y blanco */
+}
+
+main {
+    margin-top: 200px;
+    /* Espacio superior para separar el contenido principal del header */
+}
+
+.stats {
+    text-align: center;
+    margin-bottom: 70px;
+    /* Centra y separa la sección de estadísticas */
+}
+
+.stats h2 {
+    color: #c6ff00;
+    font-size: 3rem;
+    margin-bottom: 50px;
+    /* Título de estadísticas, grande y verde */
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+    /* Distribuye las estadísticas en fila con separación amplia */
+}
+
+.stat-title {
+    font-size: 2rem;
+    color: #b2ffea;
+    margin-bottom: 50px;
+    /* Título de cada estadística, grande y celeste */
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    color: #b2ffea;
+    font-weight: 700;
+    /* Número de estadística, muy grande y en negrita */
+}
+
+.stat-icon {
+    font-size: 2.2rem;
+    margin-top: 50px;
+    color: #b2ffea;
+    /* Icono de estadística, tamaño mediano y celeste */
+}
+
+.shortcuts h2 {
+    text-align: center;
+    color: #c6ff00;
+    font-size: 3rem;
+    margin-bottom: 32px;
+    margin-top: 200px;
+    /* Título de secciones, grande y verde */
+}
+
+.subtitle-seccion {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 400;
+ /* Subtítulo debajo del h1, tamaño normal y blanco */
+}
+
+.shortcuts-desc {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    margin: 64px 0;
+    /* Contenedor solo para los accesos directos, alineados en fila */
+}
+
+.shortcut {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #8a97b7;
+    font-size: 1.1rem;
+    gap: 12px;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(.4,1.4,.5,1);
+    position: relative;
+    min-width: 100px;
+    min-height: 80px;
+    background: #232947;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px #1a1f3644;
+    padding: 24px 18px 18px 18px;
+    cursor: pointer;
+    /* Tarjeta de acceso directo: fondo, sombra, bordes redondeados, efecto hover */
+}
+
+.shortcut i {
+    font-size: 3.5rem;
+    margin-bottom: 8px;
+    transition: transform 0.25s cubic-bezier(.4,1.4,.5,1), color 0.2s;
+    /* Icono grande con animación al hacer hover */
+}
+
+.shortcut-title {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #232947;
+    color: #c6ff00;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 4px 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #23294788;
+    transition: opacity 0.2s, bottom 0.2s;
+    z-index: 2;
+    white-space: nowrap;
+    /* Tooltip oculto que aparece al hacer hover sobre el shortcut */
+}
+
+.shortcut:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 24px #c6ff0044;
+    background: #1a1f36;
+    /* Efecto lupa y sombra al pasar el mouse */
+}
+
+.shortcut:hover i {
+    transform: scale(1.18);
+    color: #c6ff00;
+    filter: drop-shadow(0 2px 8px #c6ff00aa);
+    /* Icono crece y cambia a verde con sombra */
+}
+
+.shortcut:hover .shortcut-title {
+    opacity: 1;
+    bottom: -8px;
+    /* Muestra el tooltip del shortcut */
+}
+
+.donaciones {
+    text-align: center;
+    margin-top: 200px;
+    /* Centra la sección de donaciones y la separa del contenido superior */
+}
+
+.donaciones h3 {
+    color: #fff;
+    font-size: 1.3rem;
+    border-bottom: 3px solid #c6ff00;
+    display: inline-block;
+    padding-bottom: 4px;
+    margin-bottom: 24px;
+    /* Título de donaciones, blanco con subrayado verde */
+}
+
+.donaciones-desc {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    /* Descripción de donaciones, texto blanco */
+}
+
+.donaciones-links {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 32px;
+    /* Enlaces de donaciones, tamaño normal y blanco */
+}
+
+.donacion-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    /* Enlace de donación, blanco y en negrita */
+}
+
+.donacion-link:hover {
+    color: #c6ff00;
+    /* Enlace de donación cambia a verde al pasar el mouse */
+}
+
+/* Navbar */
+.navbar {
+    width: 100%;
+    background: #1a1f36;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px #00000033;
+    /* Barra de navegación fija arriba, fondo oscuro y sombra */
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    padding: 0 40px;
+    height: 56px;
+    /* Lista de navegación horizontal, alineada y con altura fija */
+}
+
+.navbar li {
+    margin-left: 32px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    /* Elementos de la lista con separación y alineación vertical */
+}
+
+.navbar li:first-child {
+    margin-left: 0;
+    display: flex-start;
+    margin-right: 32px;
+    /* Primer elemento (logo) sin margen izquierdo y con margen derecho */
+}
+
+.logo-tc-nav {
+    font-weight: bold;
+    /* color y font-size comentados porque ahora es imagen */
+    letter-spacing: 2px;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(.4,1.4,.5,1), filter 0.2s;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    height: 56px;
+    /* Contenedor del logo en navbar, mantiene alineación y efecto hover */
+}
+
+.logo-tc-nav span {
+    color: #b2ffea;
+    /* Si usas texto en vez de imagen, parte del logo en celeste */
+}
+
+.logo-tc-nav:hover {
+    transform: scale(1.18);
+    color: #b2ffea;
+    filter: drop-shadow(0 2px 8px #b2ffea88);
+    /* Efecto lupa y sombra al pasar el mouse sobre el logo */
+}
+
+.logo-tc-nav-img {
+    height: 38px;
+    width: auto;
+    display: block;
+    transition: transform 0.25s cubic-bezier(.4,1.4,.5,1), filter 0.2s;
+    filter: drop-shadow(0 2px 8px #c6ff0044);
+    /* Imagen del logo en navbar, tamaño fijo y sombra */
+}
+
+.logo-tc-nav:hover .logo-tc-nav-img {
+    transform: scale(1.18);
+    filter: drop-shadow(0 2px 8px #b2ffea88);
+    /* Efecto lupa y sombra celeste al hacer hover en la imagen del logo */
+}
+
+.navbar a {
+    color: #b2ffea;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0 12px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s, background 0.2s;
+    border-radius: 8px;
+    /* Estilo de los enlaces del navbar: color celeste, negrita, padding y efecto hover */
+}
+
+.navbar a:hover {
+    color: #c6ff00;
+    background: #232947;
+    /* Enlace del navbar cambia a verde y fondo más oscuro al pasar el mouse */
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    background: #1a1f36;
+    color: #b2ffea;
+    text-align: center;
+    padding: 32px 0 24px 0;
+    font-size: 1rem;
+    margin-top: 120px;
+    border-top: 2px solid #232947;
+    /* Pie de página: fondo oscuro, texto celeste, centrado y con separación superior */
+}
