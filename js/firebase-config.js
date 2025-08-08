@@ -1,5 +1,9 @@
-// Reemplaza con tus datos de Firebase Console
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Import the functions you need from the SDKs
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
+import { getAnalytics, logEvent } from "firebase/analytics";
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDLeaWXEJISPhLVU6LnHQ2FU7kmmEhu7H8",
   authDomain: "comisionesyterminales.firebaseapp.com",
@@ -10,44 +14,38 @@ const firebaseConfig = {
   measurementId: "G-YXFKJ5N9RC"
 };
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const analytics = firebase.analytics();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
-// Función para registrar consultas
+// Export the functions you want to use
+export { db, analytics, logEvent };
+
+// Function to log queries
 export const logQuery = async () => {
   try {
-    await db.collection('stats').doc('calculator').update({
-      queries: firebase.firestore.FieldValue.increment(1),
+    const statsRef = doc(db, "stats", "calculator");
+    await updateDoc(statsRef, {
+      queries: increment(1),
       lastUpdated: new Date()
     });
-    analytics.logEvent('calculate_event');
+    logEvent(analytics, 'calculate_event');
   } catch (error) {
-    console.error("Error registrando consulta:", error);
+    console.error("Error logging query:", error);
   }
 };
 
-// Registrar calificación
+// Function to log ratings
 export const logRating = async (stars) => {
-    try {
-        const ratingRef = doc(db, "stats", "calculator");
-        await updateDoc(ratingRef, {
-            ratings: arrayUnion(stars),
-            lastRated: new Date()
-        });
-        
-        // Calcular nuevo promedio
-        const docSnap = await getDoc(ratingRef);
-        const ratings = docSnap.data().ratings || [];
-        const total = ratings.reduce((sum, val) => sum + val, 0);
-        const avg = total / ratings.length;
-        
-        await updateDoc(ratingRef, {
-            avg_rating: avg
-        });
-        
-    } catch (error) {
-        console.error("Error registrando calificación:", error);
-    }
+  try {
+    const statsRef = doc(db, "stats", "calculator");
+    await updateDoc(statsRef, {
+      ratings: arrayUnion(stars),
+      lastRated: new Date()
+    });
+    logEvent(analytics, 'rate_event', { stars });
+  } catch (error) {
+    console.error("Error logging rating:", error);
+  }
 };
