@@ -1,5 +1,5 @@
 // Importaciones
-import { logQuery, logRating } from './firebase-config.js';
+import { logQuery, logRating } from './js/firebase-config.js';
 
 // Elementos DOM
 const montoInput = document.getElementById('monto');
@@ -172,4 +172,5 @@ montoInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         handleCalculate();
     }
+
 });
