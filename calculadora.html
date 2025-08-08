@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Comisiones - Terminales</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <!-- Mismo header que index.html -->
+       <div class="header-content">
+            <div class="icon-terminal">
+                <img src="/assets/img/terminal.png" alt="calc" class="img-calculadora">
+            </div>
+            <div class="header-text">
+                <h1>
+                    <span class="highlight">Terminales</span>
+                    <span class="amp">&</span>
+                    <span class="highlight2">Comisiones</span>
+                </h1>
+                <p class="subtitle">Conoce cuáles son las comisiones que te cobran las terminales de venta en México.</p>
+            </div>
+        </div>  
+    </header>
+
+    <main class="calculator-container">
+        <h1><i class="fas fa-calculator"></i> Calculadora de Comisiones</h1>
+        
+        <div class="input-section">
+            <label for="monto">Ingresa el monto a cobrar:</label>
+            <div class="input-group">
+                <span class="currency">$</span>
+                <input type="number" id="monto" placeholder="Ej. 1000" min="0" step="0.01">
+                <button id="calcular-btn">Calcular</button>
+            </div>
+        </div>
+
+        <div id="result-section" class="hidden">
+            <h2>Resultados para: <span id="monto-ingresado">$0</span></h2>
+            
+            <div class="results-container">
+                <!-- Los resultados se generarán dinámicamente con JS -->
+            </div>
+            
+            <div class="rating-section">
+                <p>¿Cómo calificas estos resultados?</p>
+                <div class="stars">
+                    <i class="far fa-star" data-value="1"></i>
+                    <i class="far fa-star" data-value="2"></i>
+                    <i class="far fa-star" data-value="3"></i>
+                    <i class="far fa-star" data-value="4"></i>
+                    <i class="far fa-star" data-value="5"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Mismo footer que index.html -->
+         <div class="footer-content">
+            <div>
+                <strong>Terminales & Comisiones</strong> &copy; 2025
+            </div>
+            <div>
+                Desarrollado por Caja de Herramientas           </div>
+        </div> 
+    </footer>
+
+    <script src="js/providers.js" type="module"></script>
+    <script src="js/firebase-config.js" type="module"></script>
+    <script src="js/calculator.js" type="module"></script>
+</body>
+</html>
