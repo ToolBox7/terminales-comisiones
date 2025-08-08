@@ -9,34 +9,18 @@
     <link rel="stylesheet" href="/css/styles.css">
     <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- Google Analytics (ejemplo, reemplaza por tu ID real) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXFKJ5N9RC"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-YXFKJ5N9RC');
-      // Aquí podrías agregar lógica para obtener métricas y mostrarlas dinámicamente
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YXFKJ5N9RC');
     </script>
     <script type="module" src="js/real-time-stats.js"></script>
-    // Sección colocada 11:27 8/8/25 - actualiza el script de Firebase
-    <script type="module">
-  // Import the functions you need from the SDKs
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
-  
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    // ... your config ...
-  };
-  
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const analytics = getAnalytics(app);
-</script>
-</head>
+    </head>
 <body class="bg-custom">
     <!-- Navbar superior con logo integrado -->
     <nav class="navbar">
@@ -70,26 +54,29 @@
     </header>
 
     <main>
-        <section class="stats">
-            <h2>Nuestros números.</h2>
+        <section class="stats-section">
+            <h2>Estadísticas en Tiem Real</h2>
             <div class="stats-grid">
-                <div>
-                    <div class="stat-title">Usuarios</div>
-                    <div class="stat-number" id="usuarios">150</div>
-                    <i class="fa-solid fa-people-group stat-icon"></i>
-                </div>
-                <div>
-                    <div class="stat-title">Consultas</div>
-                    <div class="stat-number" id="consultas">1499</div>
-                    <i class="fa-solid fa-calculator stat-icon"></i>
-                </div>
-                <div>
-                    <div class="stat-title">Calificación</div>
-                    <div class="stat-number" id="calificacion">4.5</div>
-                    <i class="fa-solid fa-gauge-high stat-icon"></i>
-                </div>
-            </div>
-        </section>
+                <!-- Tarjeta Usuarios Activos -->
+                <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <h3>Usuarios Activos</h3>
+                <span id="active-users" class="counter">0</span>
+            </div>        
+        <!-- Tarjeta Consultas -->
+        <div class="stat-card">
+            <i class="fas fa-calculator"></i>
+            <h3>Consultas Realizadas</h3>
+            <span id="total-queries" class="counter">0</span>
+        </div>        
+        <!-- Tarjeta Calificación -->
+        <div class="stat-card">
+            <i class="fas fa-star"></i>
+            <h3>Calificación Promedio</h3>
+            <span id="avg-rating" class="counter">0.0</span>
+        </div>
+    </div>
+</section>
 
         <section class="shortcuts">
             <h2>Secciones.</h2>
@@ -167,5 +154,75 @@
         // Si falla, deja los valores por defecto
       });
     </script>
+    <!-- Configuración Firebase -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    // Tu configuración Firebase (la misma que usas en firebase-config.js)
+        const firebaseConfig = {
+        apiKey: "AIzaSyDLeaWXEJISPhLVU6LnHQ2FU7kmmEhu7H8",
+        authDomain: "comisionesyterminales.firebaseapp.com",
+        projectId: "comisionesyterminales",
+        storageBucket: "comisionesyterminales.firebasestorage.app",
+        messagingSenderId: "53437890803",
+        appId: "1:53437890803:web:bc33099a24cb296f0a7786",
+        measurementId: "G-YXFKJ5N9RC"
+        };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Referencia al documento de estadísticas
+    const statsRef = doc(db, "stats", "calculator");
+
+    // Escuchar cambios en tiempo real
+    onSnapshot(statsRef, (doc) => {
+        const data = doc.data();
+        if (data) {
+            // Actualizar contadores
+            document.getElementById('total-queries').textContent = data.queries || '0';
+            
+            // Formatear calificación promedio
+            const avgRating = data.avg_rating ? data.avg_rating.toFixed(1) : '0.0';
+            document.getElementById('avg-rating').textContent = avgRating;
+            
+            // Animación de contadores (opcional)
+            animateCounters();
+        }
+    });
+
+    // Función para animar los números (opcional)
+    function animateCounters() {
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // Duración de la animación en ms
+        
+        counters.forEach(counter => {
+            const target = +counter.innerText;
+            const increment = target / speed;
+            let current = 0;
+            
+            const updateCount = () => {
+                current += increment;
+                if (current < target) {
+                    counter.innerText = Math.ceil(current);
+                    setTimeout(updateCount, 1);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            
+            updateCount();
+        });
+    }
+
+    // Usuarios activos (simulación - en producción usa Analytics)
+    let activeUsers = 0;
+    setInterval(() => {
+        activeUsers += Math.floor(Math.random() * 3);
+        document.getElementById('active-users').textContent = activeUsers;
+    }, 5000);
+</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
-import { db, logQuery, logRating } from './firebase-config.js';
-import { getDocs, collection } from "firebase/firestore";
+// Importaciones
+import { logQuery, logRating } from './firebase-config.js';
 
 // Elementos DOM
 const montoInput = document.getElementById('monto');
@@ -9,88 +9,167 @@ const montoIngresado = document.getElementById('monto-ingresado');
 const resultsContainer = document.querySelector('.results-container');
 const stars = document.querySelectorAll('.stars i');
 
-// Variables globales
-let providers = [];
+// Datos de respaldo (en caso de error al cargar el JSON)
+const backupProviders = [
+    {
+        id: "mercadopago",
+        name: "Mercado Pago",
+        logo: "img/providers/mercadopago.png",
+        commission: 3.5,
+        hasIVA: true,
+        description: "Comisión estándar para pagos con tarjeta"
+    },
+    {
+        id: "clip",
+        name: "Clip",
+        logo: "img/providers/clip.png",
+        commission: 2.9,
+        hasIVA: true,
+        description: "Terminales físicas"
+    }
+];
 
-// Cargar proveedores desde Firebase
+// Cargar proveedores desde JSON local
 async function loadProviders() {
     try {
-        const providersList = [];
-        const querySnapshot = await getDocs(collection(db, "providers"));
-        
-        querySnapshot.forEach(doc => {
-            providersList.push({ 
-                id: doc.id, 
-                name: doc.data().name,
-                logo: doc.data().logo,
-                commission: doc.data().commission,
-                hasIVA: doc.data().hasIVA
-            });
-        });
-        
-        return providersList;
+        const response = await fetch('../data/providers.json');
+        if (!response.ok) throw new Error('Error al cargar proveedores');
+        return await response.json();
     } catch (error) {
         console.error("Error cargando proveedores:", error);
-        return []; // Devuelve array vacío en caso de error
+        return backupProviders;
     }
 }
 
-// Cargar proveedores al iniciar la página
-document.addEventListener('DOMContentLoaded', async () => {
-    const loadedProviders = await loadProviders();
-    
-    if (loadedProviders.length > 0) {
-        providers = loadedProviders;
-    } else {
-        // Datos de respaldo si Firebase falla
-        providers = [
-            {
-                id: "mercadopago",
-                name: "Mercado Pago",
-                logo: "img/providers/mercadopago.png",
-                commission: 3.5,
-                hasIVA: true
-            },
-            {
-                id: "clip",
-                name: "Clip",
-                logo: "img/providers/clip.png",
-                commission: 2.9,
-                hasIVA: true
-            }
-        ];
-        console.warn("Usando proveedores de respaldo");
-    }
-});
-
-// Función para calcular comisiones
+/**
+ * Calcula las comisiones y muestra los resultados
+ * @param {number} monto - Monto a calcular
+ */
 function calcularComisiones(monto) {
     resultsContainer.innerHTML = '';
     
-    providers.forEach(provider => {
-        // Cálculos (mantener igual que antes)
+    window.providers.forEach(provider => {
+        // Cálculos
         const comision = monto * (provider.commission / 100);
         const iva = provider.hasIVA ? comision * 0.16 : 0;
         const comisionTotal = comision + iva;
         const montoRecibir = monto - comisionTotal;
         
-        // Generar HTML (mantener igual)
+        // Crear tarjeta de proveedor
         const card = document.createElement('div');
         card.className = 'provider-card';
         card.innerHTML = `
-            <!-- ... (mismo HTML que antes) ... -->
+            <div class="provider-header">
+                <img src="${provider.logo}" alt="${provider.name}" class="provider-logo" 
+                     onerror="this.src='img/providers/default.png'">
+                <div class="provider-name">${provider.name}</div>
+            </div>
+            <div class="result-row">
+                <span>Comisión (${provider.commission}%):</span>
+                <span>$${comision.toFixed(2)}</span>
+            </div>
+            <div class="result-row">
+                <span>IVA:</span>
+                <span>$${iva.toFixed(2)}</span>
+            </div>
+            <div class="result-row">
+                <span>Comisión Total:</span>
+                <span>$${comisionTotal.toFixed(2)}</span>
+            </div>
+            <div class="result-row">
+                <span>Monto a recibir:</span>
+                <span>$${montoRecibir.toFixed(2)}</span>
+            </div>
+            ${provider.description ? `<div class="provider-description">${provider.description}</div>` : ''}
         `;
         
         resultsContainer.appendChild(card);
     });
 }
 
-// Event listeners (mantener igual)
-calcularBtn.addEventListener('click', () => {
-    // ... (código existente)
+// Inicialización al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        window.providers = await loadProviders();
+        console.log("Proveedores cargados:", window.providers);
+        
+        // Configurar evento de cálculo
+        calcularBtn.addEventListener('click', handleCalculate);
+        
+        // Configurar estrellas de calificación
+        setupRatingStars();
+    } catch (error) {
+        console.error("Error inicializando calculadora:", error);
+    }
 });
 
-// Sistema de calificación (mantener igual)
-stars.forEach(star => {
-    // ... (código existente)
+/**
+ * Maneja el evento de cálculo
+ */
+async function handleCalculate() {
+    const monto = parseFloat(montoInput.value);
+    
+    // Validación
+    if (isNaN(monto)) {
+        alert('Por favor ingresa un monto válido');
+        montoInput.focus();
+        return;
+    }
+    
+    if (monto <= 0) {
+        alert('El monto debe ser mayor a cero');
+        montoInput.focus();
+        return;
+    }
+    
+    // Mostrar resultados
+    montoIngresado.textContent = `$${monto.toFixed(2)}`;
+    calcularComisiones(monto);
+    resultSection.classList.remove('hidden');
+    
+    // Registrar consulta en Firebase
+    try {
+        await logQuery();
+    } catch (error) {
+        console.error("No se pudo registrar la consulta:", error);
+        // Continúa mostrando resultados aunque falle Firebase
+    }
+}
+
+/**
+ * Configura los eventos de las estrellas de calificación
+ */
+function setupRatingStars() {
+    stars.forEach(star => {
+        star.addEventListener('click', async (e) => {
+            const value = parseInt(e.target.dataset.value);
+            
+            // Actualizar visualización de estrellas
+            stars.forEach((s, index) => {
+                if (index < value) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                }
+            });
+            
+            // Registrar calificación en Firebase
+            try {
+                await logRating(value);
+                alert(`¡Gracias por calificar con ${value} ${value === 1 ? 'estrella' : 'estrellas'}!`);
+            } catch (error) {
+                console.error("Error registrando calificación:", error);
+                alert("Ocurrió un error al registrar tu calificación");
+            }
+        });
+    });
+}
+
+// Manejar el evento Enter en el input
+montoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        handleCalculate();
+    }
 });

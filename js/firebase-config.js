@@ -1,9 +1,15 @@
-// Import the functions you need from the SDKs
+// Importaciones de Firebase (SDK modular v9+)
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { 
+    getFirestore, 
+    doc, 
+    updateDoc,
+    increment,
+    arrayUnion,
+    getDoc
+} from "firebase/firestore";
 
-// Your web app's Firebase configuration
+// Configuración de Firebase (reemplaza con tus datos)
 const firebaseConfig = {
   apiKey: "AIzaSyDLeaWXEJISPhLVU6LnHQ2FU7kmmEhu7H8",
   authDomain: "comisionesyterminales.firebaseapp.com",
@@ -14,38 +20,60 @@ const firebaseConfig = {
   measurementId: "G-YXFKJ5N9RC"
 };
 
-// Initialize Firebase
+// Inicialización de Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const analytics = getAnalytics(app);
 
-// Export the functions you want to use
-export { db, analytics, logEvent };
-
-// Function to log queries
+/**
+ * Registra una consulta en Firebase Firestore
+ * @returns {Promise<void>}
+ */
 export const logQuery = async () => {
-  try {
-    const statsRef = doc(db, "stats", "calculator");
-    await updateDoc(statsRef, {
-      queries: increment(1),
-      lastUpdated: new Date()
-    });
-    logEvent(analytics, 'calculate_event');
-  } catch (error) {
-    console.error("Error logging query:", error);
-  }
+    try {
+        const statsRef = doc(db, "stats", "calculator");
+        await updateDoc(statsRef, {
+            queries: increment(1),
+            lastUpdated: new Date()
+        });
+        console.log("Consulta registrada exitosamente");
+    } catch (error) {
+        console.error("Error al registrar consulta:", error);
+        throw error;
+    }
 };
 
-// Function to log ratings
+/**
+ * Registra una calificación en Firebase Firestore
+ * @param {number} stars - Número de estrellas (1-5)
+ * @returns {Promise<void>}
+ */
 export const logRating = async (stars) => {
-  try {
-    const statsRef = doc(db, "stats", "calculator");
-    await updateDoc(statsRef, {
-      ratings: arrayUnion(stars),
-      lastRated: new Date()
-    });
-    logEvent(analytics, 'rate_event', { stars });
-  } catch (error) {
-    console.error("Error logging rating:", error);
-  }
+    try {
+        const statsRef = doc(db, "stats", "calculator");
+        
+        // 1. Agregar la nueva calificación al array
+        await updateDoc(statsRef, {
+            ratings: arrayUnion(stars),
+            lastRated: new Date()
+        });
+        
+        // 2. Calcular nuevo promedio
+        const docSnap = await getDoc(statsRef);
+        const ratings = docSnap.data()?.ratings || [];
+        const total = ratings.reduce((sum, val) => sum + val, 0);
+        const avg = ratings.length > 0 ? total / ratings.length : 0;
+        
+        // 3. Actualizar el promedio
+        await updateDoc(statsRef, {
+            avg_rating: avg
+        });
+        
+        console.log(`Calificación de ${stars} estrellas registrada`);
+    } catch (error) {
+        console.error("Error al registrar calificación:", error);
+        throw error;
+    }
 };
+
+// Exportar la instancia de Firestore por si se necesita
+export { db };
